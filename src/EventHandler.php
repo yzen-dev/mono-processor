@@ -63,6 +63,15 @@ class EventHandler
     ];
 
     /**
+     * Map authentication event handlers to events.
+     *
+     * @var array
+     */
+    protected static $authEventHandlerMap = [
+        'Illuminate\Auth\Events\Authenticated' => 'authenticated',
+    ];
+
+    /**
      * The Laravel event dispatcher.
      *
      * @var \Illuminate\Contracts\Events\Dispatcher
@@ -112,6 +121,16 @@ class EventHandler
         $this->subscribeQuery();
         $this->subscribeConsole();
         $this->subscribeQueueEvents();
+    }
+
+    /**
+     * Attach all authentication event handlers.
+     */
+    public function subscribeAuthEvents()
+    {
+        foreach (static::$authEventHandlerMap as $eventName => $handler) {
+            $this->events->listen($eventName, [$this, $handler]);
+        }
     }
 
     /**
