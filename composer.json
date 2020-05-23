@@ -1,11 +1,11 @@
 {
   "name": "yzen.dev/mono-processor",
   "version": "0.0.1",
-  "description": "",
+  "description": "This Processor will display in the logs bread crumbs by which you can more quickly and accurately identify the cause of the error.",
   "minimum-stability": "dev",
   "prefer-stable": true,
   "license": "MIT",
-  "keywords": [ "laravel", "request", "Illuminate","adapter", "trait" ],
+  "keywords": [ "laravel", "log", "logger", "tap", "monolog", "processor", "breadcrumbs" ],
   "authors": [
     {
       "name": "Andey Iatsenko",
