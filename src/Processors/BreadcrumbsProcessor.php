@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace MonoProcessor\Processors;
 
 
-use App\Logging\Breadcrumbs;
+use MonoProcessor\Breadcrumbs;
 
 class BreadcrumbsProcessor extends AbstractProcessor
 {
