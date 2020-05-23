@@ -2,6 +2,7 @@
 
 namespace MonoProcessor;
 
+use MonoProcessor\Breadcrumbs;
 use Exception;
 use Illuminate\Auth\Events\Authenticated;
 use Illuminate\Console\Events\CommandFinished;
@@ -19,34 +20,34 @@ use RuntimeException;
 
 class EventHandler
 {
+
     /**
      * Map event handlers to events.
      *
      * @var array
      */
-    protected static $eventHandlerMap = [
-        // Laravel 5.1
-        'router.matched' => 'routerMatched',
-        // Laravel 5.2
-        'Illuminate\Routing\Events\RouteMatched' => 'routeMatched',
-
-        // Laravel 5.1
-        'illuminate.query' => 'query',
-        // Laravel 5.2
+    protected static $queryEventHandlerMap = [
         'Illuminate\Database\Events\QueryExecuted' => 'queryExecuted',
+    ];
 
-        // Laravel 5.5
+    /**
+     * Map event handlers to events.
+     *
+     * @var array
+     */
+    protected static $consoleEventHandlerMap = [
         'Illuminate\Console\Events\CommandStarting' => 'commandStarting',
         'Illuminate\Console\Events\CommandFinished' => 'commandFinished',
     ];
 
     /**
-     * Map authentication event handlers to events.
+     * Map route handlers to events.
      *
      * @var array
      */
-    protected static $authEventHandlerMap = [
-        'Illuminate\Auth\Events\Authenticated' => 'authenticated', // Since Laravel 5.3
+    protected static $routeEventHandlerMap = [
+        'router.matched' => 'routerMatched',
+        'Illuminate\Routing\Events\RouteMatched' => 'routeMatched',
     ];
 
     /**
@@ -55,10 +56,10 @@ class EventHandler
      * @var array
      */
     protected static $queueEventHandlerMap = [
-        'Illuminate\Queue\Events\JobProcessing' => 'queueJobProcessing', // Since Laravel 5.2
-        'Illuminate\Queue\Events\JobProcessed' => 'queueJobProcessed', // Since Laravel 5.2
-        'Illuminate\Queue\Events\JobExceptionOccurred' => 'queueJobExceptionOccurred', // Since Laravel 5.2
-        'Illuminate\Queue\Events\WorkerStopping' => 'queueWorkerStopping', // Since Laravel 5.2
+        'Illuminate\Queue\Events\JobProcessing' => 'queueJobProcessing',
+        'Illuminate\Queue\Events\JobProcessed' => 'queueJobProcessed',
+        'Illuminate\Queue\Events\JobExceptionOccurred' => 'queueJobExceptionOccurred',
+        'Illuminate\Queue\Events\WorkerStopping' => 'queueWorkerStopping',
     ];
 
     /**
@@ -83,13 +84,6 @@ class EventHandler
     private $recordSqlBindings;
 
     /**
-     * Indicates if we should we add Laravel logs to the breadcrumbs.
-     *
-     * @var bool
-     */
-    private $recordLaravelLogs;
-
-    /**
      * Indicates if we should we add queue info to the breadcrumbs.
      *
      * @var bool
@@ -106,7 +100,6 @@ class EventHandler
         $this->events = $events;
         $this->recordSqlQueries = true;
         $this->recordSqlBindings = true;
-        $this->recordLaravelLogs = true;
         $this->recordQueueInfo = true;
     }
 
@@ -115,17 +108,38 @@ class EventHandler
      */
     public function subscribe()
     {
-        foreach (static::$eventHandlerMap as $eventName => $handler) {
+        $this->subscribeRoute();
+        $this->subscribeQuery();
+        $this->subscribeConsole();
+        $this->subscribeQueueEvents();
+    }
+
+    /**
+     * Attach all event handlers.
+     */
+    public function subscribeQuery()
+    {
+        foreach (static::$queryEventHandlerMap as $eventName => $handler) {
             $this->events->listen($eventName, [$this, $handler]);
         }
     }
 
     /**
-     * Attach all authentication event handlers.
+     * Attach all event handlers.
      */
-    public function subscribeAuthEvents()
+    public function subscribeConsole()
     {
-        foreach (static::$authEventHandlerMap as $eventName => $handler) {
+        foreach (static::$consoleEventHandlerMap as $eventName => $handler) {
+            $this->events->listen($eventName, [$this, $handler]);
+        }
+    }
+
+    /**
+     * Attach all event handlers.
+     */
+    public function subscribeRoute()
+    {
+        foreach (static::$routeEventHandlerMap as $eventName => $handler) {
             $this->events->listen($eventName, [$this, $handler]);
         }
     }
@@ -297,6 +311,21 @@ class EventHandler
         file_put_contents(__DIR__ . '/errors.txt', '>>> commandFinishedHandler ' . json_encode($event) . PHP_EOL, FILE_APPEND);
         Breadcrumbs::getInstance()->add([
             'command' => $event
+        ]);
+    }
+
+    /**
+     * Since Laravel 5.3
+     *
+     * @param \Illuminate\Auth\Events\Authenticated $event
+     */
+    protected function authenticatedHandler(Authenticated $event)
+    {
+        Breadcrumbs::getInstance()->add([
+            'user' => [
+                'id' => optional($event->user)->id,
+                'email' => optional($event->user)->email
+            ]
         ]);
     }
 }
