@@ -19,7 +19,7 @@ To use MonoProcessor you need to add the following `tap` to your `logging.php` c
             'level' => 'debug',
             'days' => env('LOG_DAYS', 7),
             'tap' => [
-                App\Logging\MonoProcessors::class
+                MonoProcessors\MonoProcessors::class
             ]
         ]
     ]
