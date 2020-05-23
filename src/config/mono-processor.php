@@ -3,11 +3,23 @@ return [
     'stacktrace' => true,
     'memoryPeak' => true,
     'git' => true,
-    'php_version' => true,
-    
-    'request' => true,
-    'request_header' => true,
-    'form_data' => true,
-    
+    'phpinfo' => true,
+
     'json_format' => true,
+
+    'request' => [
+        'base_info' => true,
+        'header' => true,
+        'body' => true,
+    ],
+
+    'breadcrumbs' => [
+        'auth' => true,
+        'sql' => true,
+        'route' => true,
+        'queue' => true,
+    ],
+    'types' => [
+        'debug'
+    ]
 ];
