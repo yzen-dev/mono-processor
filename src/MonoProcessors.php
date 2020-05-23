@@ -5,11 +5,11 @@ namespace MonoProcessor;
 
 use Illuminate\Log\Logger;
 use Monolog\Formatter\LineFormatter;
-use App\Logging\Processors\MemoryProcessor;
-use App\Logging\Processors\PhpInfoProcessor;
-use App\Logging\Processors\GitInfoProcessor;
-use App\Logging\Processors\RequestProcessor;
-use App\Logging\Processors\BreadcrumbsProcessor;
+use MonoProcessor\Processors\MemoryProcessor;
+use MonoProcessor\Processors\PhpInfoProcessor;
+use MonoProcessor\Processors\GitInfoProcessor;
+use MonoProcessor\Processors\RequestProcessor;
+use MonoProcessor\Processors\BreadcrumbsProcessor;
 
 /**
  * Class MonoProcessors
