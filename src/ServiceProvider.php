@@ -45,9 +45,5 @@ class ServiceProvider extends IlluminateServiceProvider
         $handler = new EventHandler($this->app->events);
 
         $handler->subscribe();
-
-        $handler->subscribeQueueEvents();
-
-        $handler->subscribeAuthEvents();
     }
 }
