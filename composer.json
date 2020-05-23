@@ -1,0 +1,33 @@
+{
+  "name": "yzen.dev/mono-processor",
+  "version": "0.0.1",
+  "description": "",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "license": "MIT",
+  "keywords": [ "laravel", "request", "Illuminate","adapter", "trait" ],
+  "authors": [
+    {
+      "name": "Andey Iatsenko",
+      "email": "yzen.dev@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "MonoProcessor\\": "src/"
+    }
+  },
+  "require": {
+    "php": "^7.1",
+    "laravel/framework": "5.6.*|5.7.*|5.8.*|^6.0|^7.0"
+  },
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/yzen-dev/request-data-adapter"
+    }
+  ],
+  "require-dev": {
+    "roave/security-advisories": "dev-master"
+  }
+}
