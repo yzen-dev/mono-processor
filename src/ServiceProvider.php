@@ -23,7 +23,7 @@ class ServiceProvider extends IlluminateServiceProvider
 
         $this->publishes(
             [
-                __DIR__ . '/config/telelogger.php' => config_path(static::$package . '.php'),
+                __DIR__ . '/config/mono-processor.php' => config_path(static::$package . '.php'),
             ],
             'config');
     }
