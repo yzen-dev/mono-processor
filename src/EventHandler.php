@@ -120,6 +120,7 @@ class EventHandler
         $this->subscribeRoute();
         $this->subscribeQuery();
         $this->subscribeConsole();
+        $this->subscribeAuthEvents();
         $this->subscribeQueueEvents();
     }
 
