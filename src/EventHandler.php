@@ -23,7 +23,6 @@ class EventHandler
 
     /**
      * Map event handlers to events.
-     *
      * @var array
      */
     protected static $queryEventHandlerMap = [
@@ -32,7 +31,6 @@ class EventHandler
 
     /**
      * Map event handlers to events.
-     *
      * @var array
      */
     protected static $consoleEventHandlerMap = [
@@ -42,7 +40,6 @@ class EventHandler
 
     /**
      * Map route handlers to events.
-     *
      * @var array
      */
     protected static $routeEventHandlerMap = [
@@ -52,7 +49,6 @@ class EventHandler
 
     /**
      * Map queue event handlers to events.
-     *
      * @var array
      */
     protected static $queueEventHandlerMap = [
@@ -64,7 +60,6 @@ class EventHandler
 
     /**
      * Map authentication event handlers to events.
-     *
      * @var array
      */
     protected static $authEventHandlerMap = [
@@ -73,43 +68,53 @@ class EventHandler
 
     /**
      * The Laravel event dispatcher.
-     *
      * @var \Illuminate\Contracts\Events\Dispatcher
      */
     private $events;
 
     /**
      * Indicates if we should we add SQL queries to the breadcrumbs.
-     *
      * @var bool
      */
-    private $recordSqlQueries;
+    private $recordSqlInfo;
 
     /**
-     * Indicates if we should we add query bindings to the breadcrumbs.
-     *
+     * Indicates if we should we add route to the breadcrumbs.
      * @var bool
      */
-    private $recordSqlBindings;
+    private $recordRouteInfo;
 
     /**
      * Indicates if we should we add queue info to the breadcrumbs.
-     *
      * @var bool
      */
     private $recordQueueInfo;
 
     /**
+     * Indicates if we should we add auth info to the breadcrumbs.
+     * @var bool
+     */
+    private $recordAuthInfo;
+    
+    /**
+     * Indicates if we should we add console info to the breadcrumbs.
+     * @var bool
+     */
+    private $recordConsoleInfo;
+
+    /**
      * EventHandler constructor.
-     *
      * @param \Illuminate\Contracts\Events\Dispatcher $events
      */
-    public function __construct(Dispatcher $events)
+    public function __construct(Dispatcher $events, array $config)
     {
         $this->events = $events;
-        $this->recordSqlQueries = true;
-        $this->recordSqlBindings = true;
-        $this->recordQueueInfo = true;
+
+        $this->recordSqlInfo = ($config['breadcrumbs.sql'] ?? $config['breadcrumbs']['sql'] ?? true) === true;
+        $this->recordRouteInfo = ($config['breadcrumbs.route'] ?? $config['breadcrumbs']['route'] ?? true) === true;
+        $this->recordQueueInfo = ($config['breadcrumbs.queue'] ?? $config['breadcrumbs']['queue'] ?? true) === true;
+        $this->recordAuthInfo = ($config['breadcrumbs.auth'] ?? $config['breadcrumbs']['auth'] ?? true) === true;
+        $this->recordConsoleInfo = ($config['breadcrumbs.console'] ?? $config['breadcrumbs']['console'] ?? true) === true;
     }
 
     /**
@@ -117,11 +122,25 @@ class EventHandler
      */
     public function subscribe()
     {
-        $this->subscribeRoute();
-        $this->subscribeQuery();
-        $this->subscribeConsole();
-        $this->subscribeAuthEvents();
-        $this->subscribeQueueEvents();
+        if ($this->recordRouteInfo) {
+            $this->subscribeRoute();;
+        }
+        
+        if ($this->recordSqlInfo) {
+            $this->subscribeQuery();
+        }
+        
+        if ($this->recordConsoleInfo) {
+            $this->subscribeConsole();
+        }
+        
+        if ($this->recordAuthInfo) {
+            $this->subscribeAuthEvents();
+        }
+        
+        if ($this->recordQueueInfo) {
+            $this->subscribeQueueEvents();
+        }
     }
 
     /**
@@ -176,14 +195,13 @@ class EventHandler
 
     /**
      * Pass through the event and capture any errors.
-     *
      * @param string $method
      * @param array $arguments
      */
     public function __call($method, $arguments)
     {
         $handlerMethod = $handlerMethod = "{$method}Handler";
-        if ( ! method_exists($this, $handlerMethod)) {
+        if (!method_exists($this, $handlerMethod)) {
             throw new RuntimeException("Missing event handler: {$handlerMethod}");
         }
 
@@ -196,28 +214,27 @@ class EventHandler
 
     /**
      * Until Laravel 5.1
-     *
      * @param Route $route
      */
     protected function routerMatchedHandler(Route $route)
     {
-
         $routeName = $route->getName();
         $routeAction = $route->getActionName();
         if (empty($routeName) || $routeName === 'Closure') {
             $routeName = $route->uri();
         }
-        Breadcrumbs::getInstance()->add([
-            'route' => [
-                'name' => $routeName,
-                'action' => $routeAction,
-            ]
-        ]);
+        Breadcrumbs::getInstance()
+            ->add(
+                [
+                    'route' => [
+                        'name' => $routeName,
+                        'action' => $routeAction,
+                    ]
+                ]);
     }
 
     /**
      * Since Laravel 5.2
-     *
      * @param \Illuminate\Routing\Events\RouteMatched $match
      */
     protected function routeMatchedHandler(RouteMatched $match)
@@ -227,7 +244,6 @@ class EventHandler
 
     /**
      * Until Laravel 5.1
-     *
      * @param string $query
      * @param array $bindings
      * @param int $time
@@ -235,7 +251,7 @@ class EventHandler
      */
     protected function queryHandler($query, $bindings, $time, $connectionName)
     {
-        if ( ! $this->recordSqlQueries) {
+        if (!$this->recordSqlQueries) {
             return;
         }
 
@@ -244,19 +260,19 @@ class EventHandler
         if ($time !== null) {
             $data['time'] = $time;
         }
-        $data['query'] = vsprintf(str_replace(array('?'), array('\'%s\''), $query), $bindings);;
+        $data['query'] = vsprintf(str_replace(['?'], ['\'%s\''], $query), $bindings);;
 
-        Breadcrumbs::getInstance()->add(['sql' => $data]);
+        Breadcrumbs::getInstance()
+            ->add(['sql' => $data]);
     }
 
     /**
      * Since Laravel 5.2
-     *
      * @param \Illuminate\Database\Events\QueryExecuted $query
      */
     protected function queryExecutedHandler(QueryExecuted $query)
     {
-        if ( ! $this->recordSqlQueries) {
+        if (!$this->recordSqlQueries) {
             return;
         }
         $data = ['connectionName' => $query->connectionName];
@@ -264,19 +280,19 @@ class EventHandler
         if ($query->time !== null) {
             $data['time'] = $query->time;
         }
-        $data['query'] = vsprintf(str_replace(array('?'), array('\'%s\''), $query->sql), $query->bindings);;
+        $data['query'] = vsprintf(str_replace(['?'], ['\'%s\''], $query->sql), $query->bindings);;
 
-        Breadcrumbs::getInstance()->add(['sql' => $data]);
+        Breadcrumbs::getInstance()
+            ->add(['sql' => $data]);
     }
 
     /**
      * Since Laravel 5.2
-     *
      * @param \Illuminate\Queue\Events\JobProcessing $event
      */
     protected function queueJobProcessingHandler(JobProcessing $event)
     {
-        if ( ! $this->recordQueueInfo) {
+        if (!$this->recordQueueInfo) {
             return;
         }
 
@@ -291,61 +307,68 @@ class EventHandler
             $job['resolved'] = $event->job->resolveName();
         }
 
-        Breadcrumbs::getInstance()->add(['job' => $job]);
+        Breadcrumbs::getInstance()
+            ->add(['job' => $job]);
     }
 
     /**
      * Since Laravel 5.2
-     *
      * @param \Illuminate\Queue\Events\JobProcessing $event
      */
     protected function queueWorkerStoppingHandler(WorkerStopping $event)
     {
-        Breadcrumbs::getInstance()->add(['worker' => $event]);
+        Breadcrumbs::getInstance()
+            ->add(['worker' => $event]);
     }
 
     /**
      * Since Laravel 5.5
-     *
      * @param \Illuminate\Console\Events\CommandStarting $event
      */
     protected function commandStartingHandler(CommandStarting $event)
     {
         if ($event->command) {
-            if ( ! $this->recordQueueInfo) {
+            if (!$this->recordQueueInfo) {
                 return;
             }
-            Breadcrumbs::getInstance()->add([
-                'command' => $event
-            ]);
+            Breadcrumbs::getInstance()
+                ->add(
+                    [
+                        'command' => $event
+                    ]);
         }
     }
 
     /**
      * Since Laravel 5.5
-     *
      * @param \Illuminate\Console\Events\CommandFinished $event
      */
     protected function commandFinishedHandler(CommandFinished $event)
     {
-        file_put_contents(__DIR__ . '/errors.txt', '>>> commandFinishedHandler ' . json_encode($event) . PHP_EOL, FILE_APPEND);
-        Breadcrumbs::getInstance()->add([
-            'command' => $event
-        ]);
+        file_put_contents(
+            __DIR__ . '/errors.txt',
+            '>>> commandFinishedHandler ' . json_encode($event) . PHP_EOL,
+            FILE_APPEND);
+        Breadcrumbs::getInstance()
+            ->add(
+                [
+                    'command' => $event
+                ]);
     }
 
     /**
      * Since Laravel 5.3
-     *
      * @param \Illuminate\Auth\Events\Authenticated $event
      */
     protected function authenticatedHandler(Authenticated $event)
     {
-        Breadcrumbs::getInstance()->add([
-            'user' => [
-                'id' => optional($event->user)->id,
-                'email' => optional($event->user)->email
-            ]
-        ]);
+        Breadcrumbs::getInstance()
+            ->add(
+                [
+                    'user' => [
+                        'id' => optional($event->user)->id,
+                        'email' => optional($event->user)->email
+                    ]
+                ]);
     }
 }
