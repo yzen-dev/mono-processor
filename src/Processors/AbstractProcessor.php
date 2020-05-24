@@ -3,22 +3,29 @@ declare(strict_types=1);
 
 namespace MonoProcessor\Processors;
 
-use Monolog\Logger;
+use Monolog\Processor\ProcessorInterface;
 
-abstract class AbstractProcessor
+abstract class AbstractProcessor implements ProcessorInterface
 {
-    private $level;
-    
+    private $config;
+
     /**
      * @param string|int $level The minimum logging level at which this Processor will be triggered
      */
-    public function __construct($level = Logger::DEBUG)
+    public function __construct()
     {
-        $this->level = Logger::toMonologLevel($level);
+        $this->config = $this->getConfig();
     }
-    
+
     public function isWrite($level_name)
     {
         return in_array($level_name, ['ERROR','EMERGENCY']);
+    }
+
+    private function getConfig() : array
+    {
+        $config = app()['config']['mono-processor'];
+
+        return empty($config) ? [] : $config;
     }
 }
