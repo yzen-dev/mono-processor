@@ -95,7 +95,7 @@ class EventHandler
      * @var bool
      */
     private $recordAuthInfo;
-    
+
     /**
      * Indicates if we should we add console info to the breadcrumbs.
      * @var bool
@@ -125,19 +125,19 @@ class EventHandler
         if ($this->recordRouteInfo) {
             $this->subscribeRoute();;
         }
-        
+
         if ($this->recordSqlInfo) {
             $this->subscribeQuery();
         }
-        
+
         if ($this->recordConsoleInfo) {
             $this->subscribeConsole();
         }
-        
+
         if ($this->recordAuthInfo) {
             $this->subscribeAuthEvents();
         }
-        
+
         if ($this->recordQueueInfo) {
             $this->subscribeQueueEvents();
         }
@@ -251,7 +251,7 @@ class EventHandler
      */
     protected function queryHandler($query, $bindings, $time, $connectionName)
     {
-        if (!$this->recordSqlQueries) {
+        if (!$this->recordSqlInfo) {
             return;
         }
 
@@ -272,7 +272,7 @@ class EventHandler
      */
     protected function queryExecutedHandler(QueryExecuted $query)
     {
-        if (!$this->recordSqlQueries) {
+        if (!$this->recordSqlInfo) {
             return;
         }
         $data = ['connectionName' => $query->connectionName];
@@ -345,10 +345,6 @@ class EventHandler
      */
     protected function commandFinishedHandler(CommandFinished $event)
     {
-        file_put_contents(
-            __DIR__ . '/errors.txt',
-            '>>> commandFinishedHandler ' . json_encode($event) . PHP_EOL,
-            FILE_APPEND);
         Breadcrumbs::getInstance()
             ->add(
                 [

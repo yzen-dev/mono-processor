@@ -8,6 +8,10 @@ The package can be installed via composer:
 ```
 composer require yzen.dev/mono-processor
 ```
+To get started, first publish MonoProcessor config and view files into your own project:
+```
+php artisan vendor:publish --provider "MonoProcessor\ServiceProvider"
+```
 
 ## :scroll: **Usage**
 To use MonoProcessor you need to add the following `tap` to your `logging.php` config:

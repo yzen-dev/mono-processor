@@ -21,11 +21,9 @@ class ServiceProvider extends IlluminateServiceProvider
     {
         $this->bindEvents();
 
-        $this->publishes(
-            [
+        $this->publishes([
                 __DIR__ . '/config/mono-processor.php' => config_path(static::$package . '.php'),
-            ],
-            'config');
+            ], 'config');
     }
 
     /**
@@ -42,12 +40,12 @@ class ServiceProvider extends IlluminateServiceProvider
      */
     protected function bindEvents()
     {
-        $handler = new EventHandler($this->app->events,$this->getUserConfig());
+        $handler = new EventHandler($this->app->events, $this->getConfig());
 
         $handler->subscribe();
     }
 
-    private function getUserConfig(): array
+    private function getConfig() : array
     {
         $config = $this->app['config'][static::$package];
 

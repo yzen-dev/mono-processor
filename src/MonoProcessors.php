@@ -27,8 +27,10 @@ class MonoProcessors
             $handler->pushProcessor(new GitInfoProcessor);
             $handler->pushProcessor(new MemoryProcessor);
             $handler->pushProcessor(new PhpInfoProcessor);
-            $handler->pushProcessor(new RequestProcessor);
             $handler->pushProcessor(new BreadcrumbsProcessor);
+            if ( ! app()->runningInConsole()) {
+                $handler->pushProcessor(new RequestProcessor);
+            }
 
             $format = new LineFormatter(
                 "[%datetime%] %channel%.%level_name%: %message%\n%context%\n%extra%",
