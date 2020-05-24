@@ -29,3 +29,5 @@ To use MonoProcessor you need to add the following `tap` to your `logging.php` c
         ]
     ]
 ```
+As a result, you will get approximately the following information after the stack: 
+![example](http://ipic.su/img/img7/fs/example.1590353277.jpg)
