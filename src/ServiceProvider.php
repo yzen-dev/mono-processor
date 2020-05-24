@@ -40,15 +40,8 @@ class ServiceProvider extends IlluminateServiceProvider
      */
     protected function bindEvents()
     {
-        $handler = new EventHandler($this->app->events, $this->getConfig());
+        $handler = new EventHandler($this->app->events);
 
         $handler->subscribe();
-    }
-
-    private function getConfig() : array
-    {
-        $config = $this->app['config'][static::$package];
-
-        return empty($config) ? [] : $config;
     }
 }

@@ -4,6 +4,7 @@ return [
     'memoryPeak' => true,
     'git' => true,
     'phpinfo' => true,
+    'route' => true,
 
     'json_format' => true,
 
@@ -19,7 +20,8 @@ return [
         'route' => true,
         'queue' => true,
     ],
-    'types' => [
-        'debug'
+    'levels' => [
+        'ERROR',
+        'EMERGENCY'
     ]
 ];

@@ -38,8 +38,12 @@ class MonoProcessors
                 true
             );
 
-            $format->setJsonPrettyPrint(true);
-            $format->includeStacktraces(true);
+            if (Config::isEnabledValue('json_format')){
+                $format->setJsonPrettyPrint(true);
+            }
+            if (Config::isEnabledValue('stacktrace')){
+                $format->includeStacktraces(true);
+            }
             $handler->setFormatter($format);
         }
     }

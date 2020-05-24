@@ -71,50 +71,14 @@ class EventHandler
      * @var \Illuminate\Contracts\Events\Dispatcher
      */
     private $events;
-
-    /**
-     * Indicates if we should we add SQL queries to the breadcrumbs.
-     * @var bool
-     */
-    private $recordSqlInfo;
-
-    /**
-     * Indicates if we should we add route to the breadcrumbs.
-     * @var bool
-     */
-    private $recordRouteInfo;
-
-    /**
-     * Indicates if we should we add queue info to the breadcrumbs.
-     * @var bool
-     */
-    private $recordQueueInfo;
-
-    /**
-     * Indicates if we should we add auth info to the breadcrumbs.
-     * @var bool
-     */
-    private $recordAuthInfo;
-
-    /**
-     * Indicates if we should we add console info to the breadcrumbs.
-     * @var bool
-     */
-    private $recordConsoleInfo;
-
+    
     /**
      * EventHandler constructor.
      * @param \Illuminate\Contracts\Events\Dispatcher $events
      */
-    public function __construct(Dispatcher $events, array $config)
+    public function __construct(Dispatcher $events)
     {
         $this->events = $events;
-
-        $this->recordSqlInfo = ($config['breadcrumbs.sql'] ?? $config['breadcrumbs']['sql'] ?? true) === true;
-        $this->recordRouteInfo = ($config['breadcrumbs.route'] ?? $config['breadcrumbs']['route'] ?? true) === true;
-        $this->recordQueueInfo = ($config['breadcrumbs.queue'] ?? $config['breadcrumbs']['queue'] ?? true) === true;
-        $this->recordAuthInfo = ($config['breadcrumbs.auth'] ?? $config['breadcrumbs']['auth'] ?? true) === true;
-        $this->recordConsoleInfo = ($config['breadcrumbs.console'] ?? $config['breadcrumbs']['console'] ?? true) === true;
     }
 
     /**
@@ -122,23 +86,23 @@ class EventHandler
      */
     public function subscribe()
     {
-        if ($this->recordRouteInfo) {
+        if (Config::isEnabledValue('route')) {
             $this->subscribeRoute();;
         }
 
-        if ($this->recordSqlInfo) {
+        if (Config::isEnabledValue('sql')) {
             $this->subscribeQuery();
         }
 
-        if ($this->recordConsoleInfo) {
+        if (Config::isEnabledValue('config')) {
             $this->subscribeConsole();
         }
 
-        if ($this->recordAuthInfo) {
+        if (Config::isEnabledValue('auth')) {
             $this->subscribeAuthEvents();
         }
 
-        if ($this->recordQueueInfo) {
+        if (Config::isEnabledValue('queue')) {
             $this->subscribeQueueEvents();
         }
     }
@@ -251,7 +215,7 @@ class EventHandler
      */
     protected function queryHandler($query, $bindings, $time, $connectionName)
     {
-        if (!$this->recordSqlInfo) {
+        if (!Config::isEnabledValue('sql')) {
             return;
         }
 
@@ -272,7 +236,7 @@ class EventHandler
      */
     protected function queryExecutedHandler(QueryExecuted $query)
     {
-        if (!$this->recordSqlInfo) {
+        if (!Config::isEnabledValue('sql')) {
             return;
         }
         $data = ['connectionName' => $query->connectionName];
@@ -292,7 +256,7 @@ class EventHandler
      */
     protected function queueJobProcessingHandler(JobProcessing $event)
     {
-        if (!$this->recordQueueInfo) {
+        if (!Config::isEnabledValue('queue')) {
             return;
         }
 
@@ -328,7 +292,7 @@ class EventHandler
     protected function commandStartingHandler(CommandStarting $event)
     {
         if ($event->command) {
-            if (!$this->recordQueueInfo) {
+            if (!Config::isEnabledValue('queue')) {
                 return;
             }
             Breadcrumbs::getInstance()
