@@ -10,7 +10,10 @@ class RequestProcessor extends AbstractProcessor
 {
     public function __invoke(array $record) : array
     {
-        if (!$this->isWrite($record['level_name']) || !Config::isEnabledValue('request')) {
+        if (!$this->isWrite($record['level_name']) ||
+            !Config::isEnabledValue('request.base_info') ||
+            !Config::isEnabledValue('request.header') ||
+            !Config::isEnabledValue('request.body')) {
             return $record;
         }
 
