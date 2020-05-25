@@ -188,12 +188,11 @@ class EventHandler
             $routeName = $route->uri();
         }
         Breadcrumbs::getInstance()
-            ->add(
+            ->push(
+                'route',
                 [
-                    'route' => [
-                        'name' => $routeName,
-                        'action' => $routeAction,
-                    ]
+                    'name' => $routeName,
+                    'action' => $routeAction,
                 ]);
     }
 
@@ -272,7 +271,7 @@ class EventHandler
         }
 
         Breadcrumbs::getInstance()
-            ->add(['job' => $job]);
+            ->push('job', $job);
     }
 
     /**
@@ -282,7 +281,7 @@ class EventHandler
     protected function queueWorkerStoppingHandler(WorkerStopping $event)
     {
         Breadcrumbs::getInstance()
-            ->add(['worker' => $event]);
+            ->push('worker', $event);
     }
 
     /**
@@ -296,10 +295,7 @@ class EventHandler
                 return;
             }
             Breadcrumbs::getInstance()
-                ->add(
-                    [
-                        'command' => $event
-                    ]);
+                ->push('command', $event);
         }
     }
 
@@ -310,10 +306,7 @@ class EventHandler
     protected function commandFinishedHandler(CommandFinished $event)
     {
         Breadcrumbs::getInstance()
-            ->add(
-                [
-                    'command' => $event
-                ]);
+            ->push('command', $event);
     }
 
     /**
@@ -323,12 +316,11 @@ class EventHandler
     protected function authenticatedHandler(Authenticated $event)
     {
         Breadcrumbs::getInstance()
-            ->add(
+            ->push(
+                'user',
                 [
-                    'user' => [
-                        'id' => optional($event->user)->id,
-                        'email' => optional($event->user)->email
-                    ]
+                    'id' => optional($event->user)->id,
+                    'email' => optional($event->user)->email
                 ]);
     }
 }
