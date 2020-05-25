@@ -71,7 +71,7 @@ class EventHandler
      * @var \Illuminate\Contracts\Events\Dispatcher
      */
     private $events;
-    
+
     /**
      * EventHandler constructor.
      * @param \Illuminate\Contracts\Events\Dispatcher $events
@@ -227,7 +227,7 @@ class EventHandler
         $data['query'] = vsprintf(str_replace(['?'], ['\'%s\''], $query), $bindings);;
 
         Breadcrumbs::getInstance()
-            ->add(['sql' => $data]);
+            ->push('sql', $data);
     }
 
     /**
@@ -247,7 +247,7 @@ class EventHandler
         $data['query'] = vsprintf(str_replace(['?'], ['\'%s\''], $query->sql), $query->bindings);;
 
         Breadcrumbs::getInstance()
-            ->add(['sql' => $data]);
+            ->push('sql', $data);
     }
 
     /**

@@ -24,6 +24,11 @@ class Breadcrumbs
         $this->breadcrumbs [] = $data;
     }
 
+    public function push($key, $value)
+    {
+        $this->breadcrumbs[$key][] = $value;
+    }
+
     public function getBreadcrumbs()
     {
         return $this->breadcrumbs;
