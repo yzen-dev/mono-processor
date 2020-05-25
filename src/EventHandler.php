@@ -291,7 +291,7 @@ class EventHandler
     protected function commandStartingHandler(CommandStarting $event)
     {
         if ($event->command) {
-            if (!Config::isEnabledValue('queue')) {
+            if (!Config::isEnabledValue('command')) {
                 return;
             }
             Breadcrumbs::getInstance()

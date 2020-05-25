@@ -14,6 +14,8 @@ return [
 
     // Output of additional information in the format JSON_PRETTY_PRINT
     'json_format' => true,
+    
+    'command'=>true,
 
     
     'request' => [
