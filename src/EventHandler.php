@@ -274,6 +274,27 @@ class EventHandler
             ->push('job', $job);
     }
 
+    protected function queueJobExceptionOccurredHandler(JobExceptionOccurred $event)
+    {
+        if (!Config::isEnabledValue('queue')) {
+            return;
+        }
+
+        $job = [
+            'job' => $event->job->getName(),
+            'queue' => $event->job->getQueue(),
+            'attempts' => $event->job->attempts(),
+            'connection' => $event->connectionName,
+        ];
+
+        if (method_exists($event->job, 'resolveName')) {
+            $job['resolved'] = $event->job->resolveName();
+        }
+
+        Breadcrumbs::getInstance()
+            ->push('job', $job);
+    }
+
     /**
      * Since Laravel 5.2
      * @param \Illuminate\Queue\Events\JobProcessing $event
