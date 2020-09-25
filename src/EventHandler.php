@@ -86,23 +86,23 @@ class EventHandler
      */
     public function subscribe()
     {
-        if (Config::isEnabledValue('route')) {
+        if (Config::getByKey('breadcrumbs')['route']) {
             $this->subscribeRoute();;
         }
 
-        if (Config::isEnabledValue('sql')) {
+        if (Config::getByKey('breadcrumbs')['sql']) {
             $this->subscribeQuery();
         }
 
-        if (Config::isEnabledValue('config')) {
+        if (Config::getByKey('command')) {
             $this->subscribeConsole();
         }
 
-        if (Config::isEnabledValue('auth')) {
+        if (Config::getByKey('breadcrumbs')['auth']) {
             $this->subscribeAuthEvents();
         }
 
-        if (Config::isEnabledValue('queue')) {
+        if (Config::getByKey('breadcrumbs')['queue']) {
             $this->subscribeQueueEvents();
         }
     }
@@ -235,7 +235,7 @@ class EventHandler
      */
     protected function queryExecutedHandler(QueryExecuted $query)
     {
-        if (!Config::isEnabledValue('sql')) {
+        if (!Config::getByKey('breadcrumbs')['sql']) {
             return;
         }
         $data = ['connectionName' => $query->connectionName];
@@ -255,7 +255,7 @@ class EventHandler
      */
     protected function queueJobProcessingHandler(JobProcessing $event)
     {
-        if (!Config::isEnabledValue('queue')) {
+        if (!Config::getByKey('breadcrumbs')['queue']) {
             return;
         }
 
@@ -276,7 +276,7 @@ class EventHandler
 
     protected function queueJobExceptionOccurredHandler(JobExceptionOccurred $event)
     {
-        if (!Config::isEnabledValue('queue')) {
+        if (!Config::getByKey('breadcrumbs')['queue']) {
             return;
         }
 
@@ -312,7 +312,7 @@ class EventHandler
     protected function commandStartingHandler(CommandStarting $event)
     {
         if ($event->command) {
-            if (!Config::isEnabledValue('command')) {
+            if (Config::getByKey('command')) {
                 return;
             }
             Breadcrumbs::getInstance()
