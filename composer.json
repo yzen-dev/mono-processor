@@ -1,6 +1,6 @@
 {
   "name": "yzen.dev/mono-processor",
-  "version": "0.0.2",
+  "version": "0.1.4",
   "description": "This Processor will display in the logs bread crumbs by which you can more quickly and accurately identify the cause of the error.",
   "minimum-stability": "dev",
   "prefer-stable": true,
@@ -24,17 +24,17 @@
   "repositories": [
     {
       "type": "vcs",
-      "url": "https://github.com/yzen-dev/request-data-adapter"
+      "url": "https://github.com/yzen-dev/mono-processor/issues"
     }
   ],
-  "require-dev": {
-    "roave/security-advisories": "dev-master"
-  },
   "extra": {
     "laravel": {
       "providers": [
         "MonoProcessor\\ServiceProvider"
       ]
     }
+  },
+  "config": {
+    "sort-packages": true
   }
 }
