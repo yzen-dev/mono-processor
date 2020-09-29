@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MonoProcessor;
 
-use Monolog\Logger;
+use Illuminate\Log\Logger;
 use Monolog\Formatter\LineFormatter;
 use MonoProcessor\Processors\MemoryProcessor;
 use MonoProcessor\Processors\PhpInfoProcessor;
