@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MonoProcessor;
 
-use Illuminate\Log\Logger;
+use Monolog\Logger;
 use Monolog\Formatter\LineFormatter;
 use MonoProcessor\Processors\MemoryProcessor;
 use MonoProcessor\Processors\PhpInfoProcessor;
@@ -20,9 +20,9 @@ use MonoProcessor\Processors\BreadcrumbsProcessor;
 class MonoProcessors
 {
     /**
-     * @param \Monolog\Logger|Logger $logger
+     * @param Logger $logger
      */
-    public function __invoke(Logger $logger)
+    public function __invoke(Logger $logger): void
     {
         foreach ($logger->getHandlers() as $handler) {
             $handler->pushProcessor(new GitInfoProcessor());

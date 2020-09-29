@@ -8,11 +8,11 @@ namespace MonoProcessor;
  * Class Breadcrumbs
  * @package MonoProcessor
  */
-class Breadcrumbs
+final class Breadcrumbs
 {
     /**
      * Breadcrumbs of current execution
-     * @var array
+     * @var array<mixed>
      */
     private $breadcrumbs = [];
 
@@ -63,7 +63,7 @@ class Breadcrumbs
     /**
      * Get all breadcrumbs
      *
-     * @return array
+     * @return array<mixed>
      */
     public function getBreadcrumbs(): array
     {

@@ -15,7 +15,7 @@ class MemoryProcessor extends AbstractProcessor
     /**
      * Add in extra memory_peak_usage
      * @param array $record
-     * @return array
+     * @return array<mixed>
      */
     public function __invoke(array $record): array
     {

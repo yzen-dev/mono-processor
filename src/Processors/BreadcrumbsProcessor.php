@@ -16,7 +16,7 @@ class BreadcrumbsProcessor extends AbstractProcessor
      * Add in extra breadcrumbs
      *
      * @param array $record
-     * @return array
+     * @return array<mixed>
      */
     public function __invoke(array $record): array
     {

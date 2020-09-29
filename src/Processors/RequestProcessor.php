@@ -16,7 +16,7 @@ class RequestProcessor extends AbstractProcessor
      * Add in extra request info
      *
      * @param array $record
-     * @return array
+     * @return array<mixed>
      */
     public function __invoke(array $record): array
     {

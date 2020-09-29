@@ -25,21 +25,24 @@ class Config
     /**
      * Get config value by key
      *
-     * @param $key
+     * @param string $key
      * @return mixed
      */
-    public static function getByKey($key)
+    public static function getByKey(string $key)
     {
-        return self::getAll()[$key];
+        if (isset(self::getAll()[$key])) {
+            return self::getAll()[$key];
+        }
+        return false;
     }
 
     /**
      * Is parameter enabled in the config
      *
-     * @param $field
+     * @param string $field
      * @return bool
      */
-    public static function isEnabledValue($field): bool
+    public static function isEnabledValue(string $field): bool
     {
         return array_key_exists($field, self::getAll()) ? self::getAll()[$field] === true : true;
     }

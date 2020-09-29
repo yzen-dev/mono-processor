@@ -16,7 +16,7 @@ class PhpInfoProcessor extends AbstractProcessor
      * Add in extra php version
      *
      * @param array $record
-     * @return array
+     * @return array<mixed>
      */
     public function __invoke(array $record): array
     {
