@@ -22,11 +22,13 @@ class RequestProcessor
      */
     public function __invoke(array $record): array
     {
+        if (!LogLevel::isWrite($record['level_name'])) {
+            return $record;
+        }
         if (
-            !LogLevel::isWrite($record['level_name']) ||
-            Config::getByKey('request')['base_info'] ||
-            Config::getByKey('request')['header'] ||
-            Config::getByKey('request')['body']
+            !Config::getByKey('request')['base_info'] &&
+            !Config::getByKey('request')['header'] &&
+            !Config::getByKey('request')['body']
         ) {
             return $record;
         }
