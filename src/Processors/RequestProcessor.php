@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MonoProcessor\Processors;
 
+use Illuminate\Support\Facades\Request;
 use MonoProcessor\Config;
 use MonoProcessor\Helpers\LogLevel;
 
@@ -44,7 +45,7 @@ class RequestProcessor
             ];
         }
 
-        $request = request();
+        $request = Request::instance();
         if ($request && Config::getByKey('request')['header']) {
             $record['extra']['request'] += [
                 'header' => $request->header(),
