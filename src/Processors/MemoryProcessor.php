@@ -1,14 +1,23 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 
 namespace MonoProcessor\Processors;
 
-
 use MonoProcessor\Config;
 
+/**
+ * Class MemoryProcessor
+ * @package MonoProcessor\Processors
+ */
 class MemoryProcessor extends AbstractProcessor
 {
-    public function __invoke(array $record) : array
+    /**
+     * Add in extra memory_peak_usage
+     * @param array $record
+     * @return array
+     */
+    public function __invoke(array $record): array
     {
         if (!$this->isWrite($record['level_name']) || !Config::isEnabledValue('memoryPeak')) {
             return $record;
@@ -21,7 +30,11 @@ class MemoryProcessor extends AbstractProcessor
         return $record;
     }
 
-    public function formatBytes($bytes)
+    /**
+     * @param $bytes
+     * @return string
+     */
+    public function formatBytes($bytes): string
     {
         $unit = ['b', 'kb', 'mb', 'gb', 'tb', 'pb'];
         return @round($bytes / pow(1024, ($i = floor(log($bytes, 1024)))), 2) . ' ' . $unit[$i];

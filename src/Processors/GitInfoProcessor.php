@@ -1,19 +1,29 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 
 namespace MonoProcessor\Processors;
 
-
 use MonoProcessor\Config;
 
+/**
+ * Class GitInfoProcessor
+ * @package MonoProcessor\Processors
+ */
 class GitInfoProcessor extends AbstractProcessor
 {
-    public function __invoke(array $record) : array
+    /**
+     * Add in extra git info
+     *
+     * @param array $record
+     * @return array
+     */
+    public function __invoke(array $record): array
     {
         if (!$this->isWrite($record['level_name']) || !Config::isEnabledValue('git')) {
             return $record;
         }
-    
+
         $branches = shell_exec('git branch -v --no-abbrev');
 
         if (preg_match('{^\* (.+?)\s+([a-f0-9]{40})(?:\s|$)(.*)}m', $branches, $matches)) {

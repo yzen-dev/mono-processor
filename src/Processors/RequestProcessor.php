@@ -4,20 +4,29 @@ declare(strict_types=1);
 
 namespace MonoProcessor\Processors;
 
-
 use MonoProcessor\Config;
 
+/**
+ * Class RequestProcessor
+ * @package MonoProcessor\Processors
+ */
 class RequestProcessor extends AbstractProcessor
 {
+    /**
+     * Add in extra request info
+     *
+     * @param array $record
+     * @return array
+     */
     public function __invoke(array $record): array
     {
-        if (!$this->isWrite($record['level_name']) ||
+        if (
+            !$this->isWrite($record['level_name']) ||
             Config::getByKey('request')['base_info'] ||
             Config::getByKey('request')['header'] ||
-            Config::getByKey('request')['body']) {
-            {
-                return $record;
-            }
+            Config::getByKey('request')['body']
+        ) {
+            return $record;
         }
 
         $record['extra']['request'] = [];

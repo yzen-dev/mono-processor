@@ -17,20 +17,20 @@ class ServiceProvider extends IlluminateServiceProvider
      * Perform post-registration booting of services.
      * @return void
      */
-    public function boot() : void
+    public function boot(): void
     {
         $this->bindEvents();
 
         $this->publishes([
-                __DIR__ . '/config/mono-processor.php' => config_path(static::$package . '.php'),
-            ], 'config');
+            __DIR__ . '/config/mono-processor.php' => config_path(static::$package . '.php'),
+        ], 'config');
     }
 
     /**
      * Register bindings in the container.
      * @return void
      */
-    public function register()
+    public function register(): void
     {
         $this->mergeConfigFrom(__DIR__ . '/config/mono-processor.php', self::$package);
     }
@@ -38,7 +38,7 @@ class ServiceProvider extends IlluminateServiceProvider
     /**
      * Bind to the Laravel event dispatcher to log events.
      */
-    protected function bindEvents()
+    protected function bindEvents(): void
     {
         $handler = new EventHandler($this->app->events);
 

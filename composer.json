@@ -12,21 +12,32 @@
       "email": "yzen.dev@gmail.com"
     }
   ],
+  "config": {
+    "sort-packages": true
+  },
   "autoload": {
     "psr-4": {
       "MonoProcessor\\": "src/"
     }
   },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests/"
+    }
+  },
   "require": {
-    "php": "^7.1",
+    "php": "^7.2",
     "laravel/framework": "5.6.*|5.7.*|5.8.*|^6.0|^7.0"
   },
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "https://github.com/yzen-dev/mono-processor/issues"
-    }
-  ],
+  "require-dev": {
+    "phpstan/phpstan": "^0.12.37",
+    "phpunit/phpunit": "^9.3",
+    "squizlabs/php_codesniffer": "*"
+  },
+  "support": {
+    "issues": "https://github.com/yzen-dev/mono-processor/issues",
+    "source": "https://github.com/yzen-dev/mono-processor"
+  },
   "extra": {
     "laravel": {
       "providers": [
@@ -34,7 +45,15 @@
       ]
     }
   },
-  "config": {
-    "sort-packages": true
+  "scripts": {
+    "phpunit": [
+      "./vendor/phpunit/phpunit/phpunit --configuration ./phpunit.xml"
+    ],
+    "phpstan": [
+      "./vendor/bin/phpstan analyse -c ./phpstan.neon"
+    ],
+    "phpcs": [
+      "./vendor/bin/phpcs --standard=./phpcs.xml -n --no-cache"
+    ]
   }
 }

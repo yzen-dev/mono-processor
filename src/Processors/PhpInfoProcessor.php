@@ -1,14 +1,24 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 
 namespace MonoProcessor\Processors;
 
-
 use MonoProcessor\Config;
 
+/**
+ * Class PhpInfoProcessor
+ * @package MonoProcessor\Processors
+ */
 class PhpInfoProcessor extends AbstractProcessor
 {
-    public function __invoke(array $record) : array
+    /**
+     * Add in extra php version
+     *
+     * @param array $record
+     * @return array
+     */
+    public function __invoke(array $record): array
     {
         if (!$this->isWrite($record['level_name']) || !Config::isEnabledValue('phpinfo')) {
             return $record;

@@ -1,16 +1,32 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 
 namespace MonoProcessor;
 
-
+/**
+ * Class Breadcrumbs
+ * @package MonoProcessor
+ */
 class Breadcrumbs
 {
+    /**
+     * Breadcrumbs of current execution
+     * @var array
+     */
     private $breadcrumbs = [];
 
-    private static $instance = null;
+    /**
+     * @var Breadcrumbs|null
+     */
+    private static $instance;
 
-    public static function getInstance() : Breadcrumbs
+    /**
+     * Get current instance
+     *
+     * @return Breadcrumbs
+     */
+    public static function getInstance(): Breadcrumbs
     {
         if (static::$instance === null) {
             static::$instance = new static();
@@ -19,17 +35,37 @@ class Breadcrumbs
         return static::$instance;
     }
 
-    public function add($data)
+    /**
+     * Add info in breadcrumbs
+     *
+     * @param mixed $data
+     * @return Breadcrumbs
+     */
+    public function add($data): Breadcrumbs
     {
         $this->breadcrumbs [] = $data;
+        return $this;
     }
 
-    public function push($key, $value)
+    /**
+     * Add info for key in breadcrumbs
+     *
+     * @param string $key
+     * @param mixed $value
+     * @return Breadcrumbs
+     */
+    public function push(string $key, $value): Breadcrumbs
     {
         $this->breadcrumbs[$key][] = $value;
+        return $this;
     }
 
-    public function getBreadcrumbs()
+    /**
+     * Get all breadcrumbs
+     *
+     * @return array
+     */
+    public function getBreadcrumbs(): array
     {
         return $this->breadcrumbs;
     }

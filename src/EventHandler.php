@@ -2,22 +2,23 @@
 
 namespace MonoProcessor;
 
-use MonoProcessor\Breadcrumbs;
 use Exception;
+use RuntimeException;
+use Illuminate\Routing\Route;
 use Illuminate\Auth\Events\Authenticated;
-use Illuminate\Console\Events\CommandFinished;
-use Illuminate\Console\Events\CommandStarting;
+use Illuminate\Queue\Events\JobProcessing;
+use Illuminate\Routing\Events\RouteMatched;
+use Illuminate\Queue\Events\WorkerStopping;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Events\QueryExecuted;
-use Illuminate\Log\Events\MessageLogged;
+use Illuminate\Console\Events\CommandFinished;
+use Illuminate\Console\Events\CommandStarting;
 use Illuminate\Queue\Events\JobExceptionOccurred;
-use Illuminate\Queue\Events\JobProcessed;
-use Illuminate\Queue\Events\JobProcessing;
-use Illuminate\Queue\Events\WorkerStopping;
-use Illuminate\Routing\Events\RouteMatched;
-use Illuminate\Routing\Route;
-use RuntimeException;
 
+/**
+ * Class EventHandler
+ * @package MonoProcessor
+ */
 class EventHandler
 {
 
@@ -84,10 +85,10 @@ class EventHandler
     /**
      * Attach all event handlers.
      */
-    public function subscribe()
+    public function subscribe(): void
     {
         if (Config::getByKey('breadcrumbs')['route']) {
-            $this->subscribeRoute();;
+            $this->subscribeRoute();
         }
 
         if (Config::getByKey('breadcrumbs')['sql']) {
@@ -110,7 +111,7 @@ class EventHandler
     /**
      * Attach all authentication event handlers.
      */
-    public function subscribeAuthEvents()
+    public function subscribeAuthEvents(): void
     {
         foreach (static::$authEventHandlerMap as $eventName => $handler) {
             $this->events->listen($eventName, [$this, $handler]);
@@ -120,7 +121,7 @@ class EventHandler
     /**
      * Attach all event handlers.
      */
-    public function subscribeQuery()
+    public function subscribeQuery(): void
     {
         foreach (static::$queryEventHandlerMap as $eventName => $handler) {
             $this->events->listen($eventName, [$this, $handler]);
@@ -130,7 +131,7 @@ class EventHandler
     /**
      * Attach all event handlers.
      */
-    public function subscribeConsole()
+    public function subscribeConsole(): void
     {
         foreach (static::$consoleEventHandlerMap as $eventName => $handler) {
             $this->events->listen($eventName, [$this, $handler]);
@@ -140,7 +141,7 @@ class EventHandler
     /**
      * Attach all event handlers.
      */
-    public function subscribeRoute()
+    public function subscribeRoute(): void
     {
         foreach (static::$routeEventHandlerMap as $eventName => $handler) {
             $this->events->listen($eventName, [$this, $handler]);
@@ -150,7 +151,7 @@ class EventHandler
     /**
      * Attach all queue event handlers.
      */
-    public function subscribeQueueEvents()
+    public function subscribeQueueEvents(): void
     {
         foreach (static::$queueEventHandlerMap as $eventName => $handler) {
             $this->events->listen($eventName, [$this, $handler]);
@@ -180,7 +181,7 @@ class EventHandler
      * Until Laravel 5.1
      * @param Route $route
      */
-    protected function routerMatchedHandler(Route $route)
+    protected function routerMatchedHandler(Route $route): void
     {
         $routeName = $route->getName();
         $routeAction = $route->getActionName();
@@ -193,14 +194,15 @@ class EventHandler
                 [
                     'name' => $routeName,
                     'action' => $routeAction,
-                ]);
+                ]
+            );
     }
 
     /**
      * Since Laravel 5.2
      * @param \Illuminate\Routing\Events\RouteMatched $match
      */
-    protected function routeMatchedHandler(RouteMatched $match)
+    protected function routeMatchedHandler(RouteMatched $match): void
     {
         $this->routerMatchedHandler($match->route);
     }
@@ -209,10 +211,10 @@ class EventHandler
      * Until Laravel 5.1
      * @param string $query
      * @param array $bindings
-     * @param int $time
+     * @param mixed $time
      * @param string $connectionName
      */
-    protected function queryHandler($query, $bindings, $time, $connectionName)
+    protected function queryHandler(string $query, array $bindings, $time, string $connectionName): void
     {
         if (!Config::isEnabledValue('sql')) {
             return;
@@ -223,7 +225,7 @@ class EventHandler
         if ($time !== null) {
             $data['time'] = $time;
         }
-        $data['query'] = vsprintf(str_replace(['?'], ['\'%s\''], $query), $bindings);;
+        $data['query'] = vsprintf(str_replace(['?'], ['\'%s\''], $query), $bindings);
 
         Breadcrumbs::getInstance()
             ->push('sql', $data);
@@ -233,7 +235,7 @@ class EventHandler
      * Since Laravel 5.2
      * @param \Illuminate\Database\Events\QueryExecuted $query
      */
-    protected function queryExecutedHandler(QueryExecuted $query)
+    protected function queryExecutedHandler(QueryExecuted $query): void
     {
         if (!Config::getByKey('breadcrumbs')['sql']) {
             return;
@@ -243,7 +245,7 @@ class EventHandler
         if ($query->time !== null) {
             $data['time'] = $query->time;
         }
-        $data['query'] = vsprintf(str_replace(['?'], ['\'%s\''], $query->sql), $query->bindings);;
+        $data['query'] = vsprintf(str_replace(['?'], ['\'%s\''], $query->sql), $query->bindings);
 
         Breadcrumbs::getInstance()
             ->push('sql', $data);
@@ -253,7 +255,7 @@ class EventHandler
      * Since Laravel 5.2
      * @param \Illuminate\Queue\Events\JobProcessing $event
      */
-    protected function queueJobProcessingHandler(JobProcessing $event)
+    protected function queueJobProcessingHandler(JobProcessing $event): void
     {
         if (!Config::getByKey('breadcrumbs')['queue']) {
             return;
@@ -274,7 +276,10 @@ class EventHandler
             ->push('job', $job);
     }
 
-    protected function queueJobExceptionOccurredHandler(JobExceptionOccurred $event)
+    /**
+     * @param JobExceptionOccurred $event
+     */
+    protected function queueJobExceptionOccurredHandler(JobExceptionOccurred $event): void
     {
         if (!Config::getByKey('breadcrumbs')['queue']) {
             return;
@@ -299,7 +304,7 @@ class EventHandler
      * Since Laravel 5.2
      * @param \Illuminate\Queue\Events\JobProcessing $event
      */
-    protected function queueWorkerStoppingHandler(WorkerStopping $event)
+    protected function queueWorkerStoppingHandler(WorkerStopping $event): void
     {
         Breadcrumbs::getInstance()
             ->push('worker', $event);
@@ -309,7 +314,7 @@ class EventHandler
      * Since Laravel 5.5
      * @param \Illuminate\Console\Events\CommandStarting $event
      */
-    protected function commandStartingHandler(CommandStarting $event)
+    protected function commandStartingHandler(CommandStarting $event): void
     {
         if ($event->command) {
             if (Config::getByKey('command')) {
@@ -324,7 +329,7 @@ class EventHandler
      * Since Laravel 5.5
      * @param \Illuminate\Console\Events\CommandFinished $event
      */
-    protected function commandFinishedHandler(CommandFinished $event)
+    protected function commandFinishedHandler(CommandFinished $event): void
     {
         Breadcrumbs::getInstance()
             ->push('command', $event);
@@ -334,7 +339,7 @@ class EventHandler
      * Since Laravel 5.3
      * @param \Illuminate\Auth\Events\Authenticated $event
      */
-    protected function authenticatedHandler(Authenticated $event)
+    protected function authenticatedHandler(Authenticated $event): void
     {
         Breadcrumbs::getInstance()
             ->push(
@@ -342,6 +347,7 @@ class EventHandler
                 [
                     'id' => optional($event->user)->id,
                     'email' => optional($event->user)->email
-                ]);
+                ]
+            );
     }
 }
