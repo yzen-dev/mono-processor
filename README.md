@@ -31,3 +31,27 @@ To use MonoProcessor you need to add the following `tap` to your `logging.php` c
 ```
 As a result, you will get approximately the following information after the stack: 
 ![example](http://ipic.su/img/img7/fs/Bezymyannyj.1601029498.jpg)
+
+## :scroll: **Configuration**
+
+| Processor         | Description                                                  |
+| ----------------- | ------------------------------------------------------------ |
+| stacktrace        | Stack output when an error occurs                            |
+| memoryPeak        | Memory peak at runtime                                       |
+| git               | Git branch and Git commit SHA                                |
+| phpinfo           | php info (version)                                           |
+| json_format       | Output of additional information in the format JSON_PRETTY_PRINT|
+| command           | Listen console commands                                      |
+| levels            | levels (DEBUG, INFO, NOTICE, WARNING, ERROR, CRITICAL, ALERT, EMERGENCY)|
+| uid               | Adds a unique identifier                                     |
+| ----------------- | ------------------------------------------------------------ |
+| request           | Logging of the received request                              |
+| request.base_info | add request host,ip,url,method                               |
+| request.header    | add request header                                           |
+| request.body      | add request body                                             |
+| ----------------- | ------------------------------------------------------------ |
+| breadcrumbs       | What breadcrumbs do you need to collect                      |
+| breadcrumbs.auth  | auth info                                                    |
+| breadcrumbs.sql   | List of sql queries                                          |
+| breadcrumbs.route  | route info (name,action)                                    |
+
