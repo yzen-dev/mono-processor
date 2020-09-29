@@ -43,7 +43,7 @@ As a result, you will get approximately the following information after the stac
 | json_format       | Output of additional information in the format JSON_PRETTY_PRINT|
 | command           | Listen console commands                                      |
 | levels            | levels (DEBUG, INFO, NOTICE, WARNING, ERROR, CRITICAL, ALERT, EMERGENCY)|
-| uid               | Adds a unique identifier                                     |
+| uuid              | Adds a unique identifier                                     |
 | ----------------- | ------------------------------------------------------------ |
 | request           | Logging of the received request                              |
 | request.base_info | add request host,ip,url,method                               |

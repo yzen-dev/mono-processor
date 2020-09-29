@@ -6,6 +6,7 @@ namespace MonoProcessor;
 
 use Illuminate\Log\Logger;
 use Monolog\Formatter\LineFormatter;
+use MonoProcessor\Processors\UuidProcessor;
 use MonoProcessor\Processors\MemoryProcessor;
 use MonoProcessor\Processors\PhpInfoProcessor;
 use MonoProcessor\Processors\GitInfoProcessor;
@@ -29,6 +30,7 @@ class MonoProcessors
             $handler->pushProcessor(new MemoryProcessor());
             $handler->pushProcessor(new PhpInfoProcessor());
             $handler->pushProcessor(new BreadcrumbsProcessor());
+            $handler->pushProcessor(new UuidProcessor());
             if (!app()->runningInConsole()) {
                 $handler->pushProcessor(new RequestProcessor());
             }
