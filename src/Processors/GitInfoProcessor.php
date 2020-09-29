@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace MonoProcessor\Processors;
 
 use MonoProcessor\Config;
+use MonoProcessor\Helpers\LogLevel;
 
 /**
  * Class GitInfoProcessor
  * @package MonoProcessor\Processors
  */
-class GitInfoProcessor extends AbstractProcessor
+class GitInfoProcessor
 {
     /**
      * Add in extra git info
@@ -20,7 +21,7 @@ class GitInfoProcessor extends AbstractProcessor
      */
     public function __invoke(array $record): array
     {
-        if (!$this->isWrite($record['level_name']) || !Config::isEnabledValue('git')) {
+        if (!LogLevel::isWrite($record['level_name']) || !Config::isEnabledValue('git')) {
             return $record;
         }
 

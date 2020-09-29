@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace MonoProcessor\Processors;
 
 use MonoProcessor\Config;
+use MonoProcessor\Helpers\LogLevel;
 
 /**
  * Class MemoryProcessor
  * @package MonoProcessor\Processors
  */
-class MemoryProcessor extends AbstractProcessor
+class MemoryProcessor
 {
     /**
      * Add in extra memory_peak_usage
@@ -19,7 +20,7 @@ class MemoryProcessor extends AbstractProcessor
      */
     public function __invoke(array $record): array
     {
-        if (!$this->isWrite($record['level_name']) || !Config::isEnabledValue('memoryPeak')) {
+        if (!LogLevel::isWrite($record['level_name']) || !Config::isEnabledValue('memoryPeak')) {
             return $record;
         }
 

@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace MonoProcessor\Processors;
 
 use MonoProcessor\Config;
+use MonoProcessor\Helpers\LogLevel;
 
 /**
  * Class PhpInfoProcessor
  * @package MonoProcessor\Processors
  */
-class PhpInfoProcessor extends AbstractProcessor
+class PhpInfoProcessor
 {
     /**
      * Add in extra php version
@@ -20,7 +21,7 @@ class PhpInfoProcessor extends AbstractProcessor
      */
     public function __invoke(array $record): array
     {
-        if (!$this->isWrite($record['level_name']) || !Config::isEnabledValue('phpinfo')) {
+        if (!LogLevel::isWrite($record['level_name']) || !Config::isEnabledValue('phpinfo')) {
             return $record;
         }
         $record['extra'] += [

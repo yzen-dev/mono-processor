@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace MonoProcessor\Processors;
 
 use MonoProcessor\Breadcrumbs;
+use MonoProcessor\Helpers\LogLevel;
 
 /**
  * Class BreadcrumbsProcessor
  * @package MonoProcessor\Processors
  */
-class BreadcrumbsProcessor extends AbstractProcessor
+class BreadcrumbsProcessor
 {
     /**
      * Add in extra breadcrumbs
@@ -20,7 +21,7 @@ class BreadcrumbsProcessor extends AbstractProcessor
      */
     public function __invoke(array $record): array
     {
-        if (!$this->isWrite($record['level_name'])) {
+        if (!LogLevel::isWrite($record['level_name'])) {
             return $record;
         }
 

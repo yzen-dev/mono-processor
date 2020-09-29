@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace MonoProcessor\Processors;
 
 use MonoProcessor\Config;
+use MonoProcessor\Helpers\LogLevel;
 
 /**
  * Class RequestProcessor
  * @package MonoProcessor\Processors
  */
-class RequestProcessor extends AbstractProcessor
+class RequestProcessor
 {
     /**
      * Add in extra request info
@@ -21,7 +22,7 @@ class RequestProcessor extends AbstractProcessor
     public function __invoke(array $record): array
     {
         if (
-            !$this->isWrite($record['level_name']) ||
+            !LogLevel::isWrite($record['level_name']) ||
             Config::getByKey('request')['base_info'] ||
             Config::getByKey('request')['header'] ||
             Config::getByKey('request')['body']
