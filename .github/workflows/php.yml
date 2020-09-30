@@ -30,5 +30,8 @@ jobs:
       if: steps.composer-cache.outputs.cache-hit != 'true'
       run: composer install --prefer-dist --no-progress --no-suggest
       
+    - name: Run phpstan
+      run: composer run-script phpstan
+      
     - name: Check codestyle
       run: composer run-script phpcs
