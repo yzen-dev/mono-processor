@@ -8,6 +8,7 @@ use MonoProcessor\Config;
 
 /**
  * Class LogLevel
+ *
  * @package MonoProcessor\Helpers
  */
 class LogLevel

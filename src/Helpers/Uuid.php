@@ -6,6 +6,7 @@ namespace MonoProcessor\Helpers;
 
 /**
  * Class Uuid
+ *
  * @package MonoProcessor\Helpers
  */
 class Uuid
