@@ -24,7 +24,7 @@ class EventHandler
 
     /**
      * Map event handlers to events.
-     * @var array
+     * @var array<string>
      */
     protected static $queryEventHandlerMap = [
         'Illuminate\Database\Events\QueryExecuted' => 'queryExecuted',
@@ -32,7 +32,7 @@ class EventHandler
 
     /**
      * Map event handlers to events.
-     * @var array
+     * @var array<string>
      */
     protected static $consoleEventHandlerMap = [
         'Illuminate\Console\Events\CommandStarting' => 'commandStarting',
@@ -41,16 +41,15 @@ class EventHandler
 
     /**
      * Map route handlers to events.
-     * @var array
+     * @var array<string>
      */
     protected static $routeEventHandlerMap = [
-        'router.matched' => 'routerMatched',
         'Illuminate\Routing\Events\RouteMatched' => 'routeMatched',
     ];
 
     /**
      * Map queue event handlers to events.
-     * @var array
+     * @var array<string>
      */
     protected static $queueEventHandlerMap = [
         'Illuminate\Queue\Events\JobProcessing' => 'queueJobProcessing',
@@ -61,7 +60,7 @@ class EventHandler
 
     /**
      * Map authentication event handlers to events.
-     * @var array
+     * @var array<string>
      */
     protected static $authEventHandlerMap = [
         'Illuminate\Auth\Events\Authenticated' => 'authenticated',
@@ -178,57 +177,12 @@ class EventHandler
     }
 
     /**
-     * Until Laravel 5.1
-     * @param Route $route
-     */
-    protected function routerMatchedHandler(Route $route): void
-    {
-        $routeName = $route->getName();
-        $routeAction = $route->getActionName();
-        if (empty($routeName) || $routeName === 'Closure') {
-            $routeName = $route->uri();
-        }
-        Breadcrumbs::getInstance()
-            ->push(
-                'route',
-                [
-                    'name' => $routeName,
-                    'action' => $routeAction,
-                ]
-            );
-    }
-
-    /**
      * Since Laravel 5.2
      * @param \Illuminate\Routing\Events\RouteMatched $match
      */
     protected function routeMatchedHandler(RouteMatched $match): void
     {
         $this->routerMatchedHandler($match->route);
-    }
-
-    /**
-     * Until Laravel 5.1
-     * @param string $query
-     * @param array $bindings
-     * @param mixed $time
-     * @param string $connectionName
-     */
-    protected function queryHandler(string $query, array $bindings, $time, string $connectionName): void
-    {
-        if (!Config::isEnabledValue('sql')) {
-            return;
-        }
-
-        $data = ['connectionName' => $connectionName];
-
-        if ($time !== null) {
-            $data['time'] = $time;
-        }
-        $data['query'] = vsprintf(str_replace(['?'], ['\'%s\''], $query), $bindings);
-
-        Breadcrumbs::getInstance()
-            ->push('sql', $data);
     }
 
     /**
