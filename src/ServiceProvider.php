@@ -24,9 +24,13 @@ class ServiceProvider extends IlluminateServiceProvider
     {
         $this->bindEvents();
 
-        $this->publishes([
-            __DIR__ . '/config/mono-processor.php' => config_path(static::$package . '.php'),
-        ], 'config');
+        $this->publishes(
+            [
+                /* @phpstan-ignore-next-line */
+                __DIR__ . '/config/mono-processor.php' => config_path(static::$package . '.php'),
+            ],
+            'config'
+        );
     }
 
     /**
@@ -43,6 +47,7 @@ class ServiceProvider extends IlluminateServiceProvider
      */
     protected function bindEvents(): void
     {
+        /* @phpstan-ignore-next-line */
         $handler = new EventHandler($this->app->events);
 
         $handler->subscribe();

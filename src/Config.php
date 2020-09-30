@@ -17,6 +17,7 @@ class Config
      */
     public static function getAll()
     {
+        /* @phpstan-ignore-next-line */
         $config = app()['config']['mono-processor'];
 
         return empty($config) ? [] : $config;

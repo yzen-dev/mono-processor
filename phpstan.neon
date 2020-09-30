@@ -1,0 +1,5 @@
+parameters:
+	level: 6
+	ignoreErrors:
+		- '#Parameter \#2 \$listener of method [a-zA-Z0-9\\_]+::[a-zA-Z0-9\\_]+\(\) expects Closure|string, array(\$this(MonoProcessor\\EventHandler), string) given.#'
+

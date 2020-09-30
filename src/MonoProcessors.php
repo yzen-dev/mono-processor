@@ -25,12 +25,14 @@ class MonoProcessors
      */
     public function __invoke(Logger $logger): void
     {
+        /* @phpstan-ignore-next-line */
         foreach ($logger->getHandlers() as $handler) {
             $handler->pushProcessor(new GitInfoProcessor());
             $handler->pushProcessor(new MemoryProcessor());
             $handler->pushProcessor(new PhpInfoProcessor());
             $handler->pushProcessor(new BreadcrumbsProcessor());
             $handler->pushProcessor(new UuidProcessor());
+            /* @phpstan-ignore-next-line */
             if (!app()->runningInConsole()) {
                 $handler->pushProcessor(new RequestProcessor());
             }

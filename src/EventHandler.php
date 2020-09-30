@@ -160,9 +160,9 @@ class EventHandler
     /**
      * Pass through the event and capture any errors.
      * @param string $method
-     * @param array $arguments
+     * @param array<mixed> $arguments
      */
-    public function __call($method, $arguments)
+    public function __call(string $method, array $arguments): void
     {
         $handlerMethod = $handlerMethod = "{$method}Handler";
         if (!method_exists($this, $handlerMethod)) {
@@ -182,7 +182,20 @@ class EventHandler
      */
     protected function routeMatchedHandler(RouteMatched $match): void
     {
-        $this->routerMatchedHandler($match->route);
+        $route = $match->route;
+        $routeName = $route->getName();
+        $routeAction = $route->getActionName();
+        if (empty($routeName) || $routeName === 'Closure') {
+            $routeName = $route->uri();
+        }
+        Breadcrumbs::getInstance()
+            ->push(
+                'route',
+                [
+                    'name' => $routeName,
+                    'action' => $routeAction,
+                ]
+            );
     }
 
     /**
@@ -256,7 +269,7 @@ class EventHandler
 
     /**
      * Since Laravel 5.2
-     * @param \Illuminate\Queue\Events\JobProcessing $event
+     * @param WorkerStopping $event
      */
     protected function queueWorkerStoppingHandler(WorkerStopping $event): void
     {
