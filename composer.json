@@ -23,7 +23,10 @@
   "autoload-dev": {
     "psr-4": {
       "Tests\\": "tests/"
-    }
+    },
+    "files": [
+      "src/Helpers/global/breadcrumbs_functions.php"
+    ]
   },
   "require": {
     "php": "^7.1",
