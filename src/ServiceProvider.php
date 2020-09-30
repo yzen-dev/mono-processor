@@ -2,7 +2,6 @@
 
 namespace MonoProcessor;
 
-use Illuminate\Log\LogManager;
 use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
 
 /**
@@ -11,6 +10,10 @@ use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
  */
 class ServiceProvider extends IlluminateServiceProvider
 {
+    /**
+     * package name
+     * @var string
+     */
     public static $package = 'mono-processor';
 
     /**

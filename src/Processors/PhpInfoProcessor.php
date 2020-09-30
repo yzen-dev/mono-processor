@@ -16,7 +16,7 @@ class PhpInfoProcessor
     /**
      * Add in extra php version
      *
-     * @param array $record
+     * @param array<mixed> $record
      * @return array<mixed>
      */
     public function __invoke(array $record): array

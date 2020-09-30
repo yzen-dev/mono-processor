@@ -15,7 +15,7 @@ class MemoryProcessor
 {
     /**
      * Add in extra memory_peak_usage
-     * @param array $record
+     * @param array<mixed> $record
      * @return array<mixed>
      */
     public function __invoke(array $record): array
@@ -32,10 +32,10 @@ class MemoryProcessor
     }
 
     /**
-     * @param $bytes
+     * @param int $bytes
      * @return string
      */
-    public function formatBytes($bytes): string
+    public function formatBytes(int $bytes): string
     {
         $unit = ['b', 'kb', 'mb', 'gb', 'tb', 'pb'];
         return @round($bytes / pow(1024, ($i = floor(log($bytes, 1024)))), 2) . ' ' . $unit[$i];

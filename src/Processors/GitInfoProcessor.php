@@ -16,7 +16,7 @@ class GitInfoProcessor
     /**
      * Add in extra git info
      *
-     * @param array $record
+     * @param array<mixed> $record
      * @return array<mixed>
      */
     public function __invoke(array $record): array

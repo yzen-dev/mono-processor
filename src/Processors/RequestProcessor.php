@@ -17,7 +17,7 @@ class RequestProcessor
     /**
      * Add in extra request info
      *
-     * @param array $record
+     * @param array<mixed> $record
      * @return array<mixed>
      */
     public function __invoke(array $record): array
@@ -48,12 +48,12 @@ class RequestProcessor
         }
 
         $request = Request::instance();
-        if ($request && Config::getByKey('request')['header']) {
+        if (Config::getByKey('request')['header']) {
             $record['extra']['request'] += [
                 'header' => $request->header(),
             ];
         }
-        if ($request && Config::getByKey('request')['body']) {
+        if (Config::getByKey('request')['body']) {
             $record['extra']['request'] += [
                 'body' => $request->all(),
             ];
