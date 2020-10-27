@@ -1,6 +1,6 @@
 {
   "name": "yzen.dev/mono-processor",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "This Processor will display in the logs bread crumbs by which you can more quickly and accurately identify the cause of the error.",
   "minimum-stability": "dev",
   "prefer-stable": true,
@@ -18,15 +18,15 @@
   "autoload": {
     "psr-4": {
       "MonoProcessor\\": "src/"
-    }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "Tests\\": "tests/"
     },
     "files": [
       "src/Helpers/global/breadcrumbs_functions.php"
     ]
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests/"
+    }
   },
   "require": {
     "php": "^7.2",
