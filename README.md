@@ -14,6 +14,12 @@ To get started, first publish MonoProcessor config and view files into your own 
 php artisan vendor:publish --provider "MonoProcessor\ServiceProvider"
 ```
 
+# :scroll: **Version Compatibility**
+| Laravel | MonoProcessor |
+| ------- | ------------- |
+| v8.x | v1.x |
+| v7.x | v0.x |
+
 ## :scroll: **Features**
 * Extends standard logs
 * Collection of SQL requests
