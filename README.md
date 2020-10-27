@@ -14,6 +14,16 @@ To get started, first publish MonoProcessor config and view files into your own 
 php artisan vendor:publish --provider "MonoProcessor\ServiceProvider"
 ```
 
+## :scroll: **Features**
+* Extends standard logs
+* Collection of SQL requests
+* Collection of HTTP requests
+* Authorized user information
+* Route information 
+* Git information 
+* PHP information 
+* Memory information 
+
 ## :scroll: **Usage**
 To use MonoProcessor you need to add the following `tap` to your `logging.php` config:
 ```php
@@ -55,3 +65,5 @@ As a result, you will get approximately the following information after the stac
 | breadcrumbs.sql   | List of sql queries                                          |
 | breadcrumbs.route  | route info (name,action)                                    |
 
+
+You can also get all harvested breadcrumbs using the `get_breadcrumbs()` method.
