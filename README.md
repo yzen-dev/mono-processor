@@ -1,6 +1,7 @@
-## MonoProcessor - Supplement your logging with auxiliary information on error
-<img alt="Packagist Downloads" src="https://img.shields.io/packagist/dm/yzen.dev/mono-processor">
-<img alt="Packagist Downloads" src="https://img.shields.io/packagist/dt/yzen.dev/mono-processor">
+## MonoProcessor - Supplement your logging with auxiliary information on error 
+![Packagist Version](https://img.shields.io/packagist/v/yzen.dev/mono-processor?color=%23007ec6&style=plastic)
+![Packagist Downloads](https://img.shields.io/packagist/dm/yzen.dev/mono-processor)
+![Packagist Downloads](https://img.shields.io/packagist/dt/yzen.dev/mono-processor)
 
 This Processor will display in the logs bread crumbs by which you can more quickly and accurately identify the cause of the error.
 
