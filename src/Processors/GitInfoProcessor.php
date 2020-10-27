@@ -27,7 +27,7 @@ class GitInfoProcessor
 
         $branches = shell_exec('git branch -v --no-abbrev');
 
-        if (preg_match('{^\* (.+?)\s+([a-f0-9]{40})(?:\s|$)(.*)}m', $branches, $matches)) {
+        if ($branches !== null && preg_match('{^\* (.+?)\s+([a-f0-9]{40})(?:\s|$)(.*)}m', $branches, $matches)) {
             $record['extra']['git'] = [
                 'branch' => $matches[1],
                 'commit' => $matches[2],
