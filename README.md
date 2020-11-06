@@ -19,7 +19,7 @@ php artisan vendor:publish --provider "MonoProcessor\ServiceProvider"
 | Laravel | MonoProcessor |
 | ------- | ------------- |
 | v8.x | v1.x |
-| v7.x | v0.x |
+| v7.x | v0.3.x |
 
 ## :scroll: **Features**
 * Extends standard logs
