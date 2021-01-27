@@ -2,6 +2,7 @@
 
 namespace MonoProcessor;
 
+use DateTime;
 use Exception;
 use RuntimeException;
 use Illuminate\Routing\Route;
@@ -212,7 +213,17 @@ class EventHandler
         if ($query->time !== null) {
             $data['time'] = $query->time;
         }
-        $data['query'] = vsprintf(str_replace(['?'], ['\'%s\''], $query->sql), $query->bindings);
+
+        $bindings = [];
+        foreach ($query->bindings as $binding) {
+            if ($binding instanceof DateTime){
+                $bindings [] = $binding->format('Y-m-d H:i:s');
+            } else {
+                $bindings [] = (string) $binding;
+            }
+        }
+
+        $data['query'] = vsprintf(str_replace(['?'], ['\'%s\''], $query->sql), $bindings);
 
         Breadcrumbs::getInstance()
             ->push('sql', $data);
