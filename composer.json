@@ -1,6 +1,6 @@
 {
   "name": "yzen.dev/mono-processor",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "This Processor will display in the logs bread crumbs by which you can more quickly and accurately identify the cause of the error.",
   "minimum-stability": "dev",
   "prefer-stable": true,
