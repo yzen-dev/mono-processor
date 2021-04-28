@@ -212,7 +212,11 @@ class EventHandler
         if ($query->time !== null) {
             $data['time'] = $query->time;
         }
-        $data['query'] = vsprintf(str_replace(['?'], ['\'%s\''], $query->sql), $query->bindings);
+        try {
+            $data['query'] = vsprintf(str_replace(['?'], ['\'%s\''], $query->sql), $query->bindings);
+        } catch(\Throwable $exception){
+            $data['query'] = $query->sql;
+        }
 
         Breadcrumbs::getInstance()
             ->push('sql', $data);
