@@ -166,6 +166,7 @@ class EventHandler
     {
         $handlerMethod = $handlerMethod = "{$method}Handler";
         if (!method_exists($this, $handlerMethod)) {
+            return;
             //throw new RuntimeException("Missing event handler: {$handlerMethod}");
         }
 
