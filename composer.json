@@ -1,6 +1,6 @@
 {
   "name": "yzen.dev/mono-processor",
-  "version": "1.0.4",
+  "version": "1.1",
   "description": "This Processor will display in the logs bread crumbs by which you can more quickly and accurately identify the cause of the error.",
   "minimum-stability": "dev",
   "prefer-stable": true,
@@ -30,15 +30,15 @@
   },
   "require": {
     "php": "^7.2 || ^8.0",
-    "illuminate/log": "^v8.0",
-    "illuminate/auth": "^v8.0",
-    "illuminate/queue": "^v8.0",
-    "illuminate/routing": "^v8.0",
-    "illuminate/http": "^v8.0",
-    "illuminate/contracts": "^v8.0",
-    "illuminate/database": "^v8.0",
-    "illuminate/console": "^v8.0",
-    "illuminate/support": "^v8.0",
+    "illuminate/log": "^v9.0",
+    "illuminate/auth": "^v9.0",
+    "illuminate/queue": "^v9.0",
+    "illuminate/routing": "^v9.0",
+    "illuminate/http": "^v9.0",
+    "illuminate/contracts": "^v9.0",
+    "illuminate/database": "^v9.0",
+    "illuminate/console": "^v9.0",
+    "illuminate/support": "^v9.0",
     "monolog/monolog": "2.*"
   },
   "require-dev": {
